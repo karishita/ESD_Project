@@ -136,7 +136,7 @@ useEffect(() => {
 
     setLoading(true);
     try {
-      const res = await registerFaculty(payload,token!);
+      const res = await registerFaculty(payload,token!,selectedPhoto!);
       if (res?.unauthorized) {
   window.location.href = "/unauthorized";
   return;

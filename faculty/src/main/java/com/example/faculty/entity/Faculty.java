@@ -1,6 +1,9 @@
 package com.example.faculty.entity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.util.*;
 @Entity
 @Table(name="faculty")
@@ -41,6 +44,7 @@ public class Faculty {
      */
     @ManyToOne
     @JoinColumn(name="department_id",nullable=false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Department department;
 
     /*
@@ -56,5 +60,6 @@ public class Faculty {
             joinColumns=@JoinColumn(name="faculty_id"),
             inverseJoinColumns=@JoinColumn(name="course_id")
     )
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Course> courses;
 }

@@ -12,6 +12,9 @@ import com.example.faculty.dto.FacultyResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.faculty.exception.UnauthorizedEmployeeException;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 @Service
@@ -24,8 +27,10 @@ public class FacultyServiceImpl implements FacultyService {
     private CourseRepository courseRepository;
     @Autowired
     private CourseTimeSlotRepository courseTimeSlotRepository;
+    @Autowired
+    private FileStorageService fileStorageService;
     @Override
-    public FacultyResponseDTO registerFaculty(FacultyDTO dto, String email)
+    public FacultyResponseDTO registerFaculty(FacultyDTO dto, String email, MultipartFile photo)
     {
         //Block Non employee emails
         if(!email.startsWith("emp"))
@@ -55,13 +60,22 @@ public class FacultyServiceImpl implements FacultyService {
         //5. Generate employee ID
         String employeeId = generateEmployeeId();
 
+        //6. Save the uploaded photo
+        String savedFileName;
+        try {
+            savedFileName = fileStorageService.saveFile(photo);
+        } catch (IOException e) {
+            throw new RuntimeException("Photo upload failed");
+        }
+
         //6. Map DTO to entity
         Faculty faculty=new Faculty();
        faculty.setEmployeeId(employeeId);
         faculty.setFullName(dto.getFullName());
-        faculty.setEmail(dto.getEmail());
+        //faculty.setEmail(dto.getEmail());
+        faculty.setEmail(email);
         faculty.setPhoneNumber(dto.getPhone());
-        faculty.setPhotoPath(dto.getPhotoPath());
+        faculty.setPhotoPath(savedFileName);
         faculty.setDepartment(dept);
         faculty.setCourses(courses);
         Faculty saved=facultyRepository.save(faculty);

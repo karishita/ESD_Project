@@ -42,11 +42,19 @@ export async function fetchCourses(token?: string): Promise<Course[]> {
   return res.json();
 }
 
-export async function registerFaculty(payload: Faculty, token?: string) {
+export async function registerFaculty(payload: Faculty, token?: string,photo?: File) {
+
+  const formData = new FormData();
+  formData.append("data", new Blob([JSON.stringify(payload)], { type: "application/json" }));
+  if (photo) {
+    formData.append("photo", photo);
+  }
   const res = await fetch(`${BASE_URL}/faculty/register`, {
     method: "POST",
-    headers: buildHeaders(token),
-    body: JSON.stringify(payload),
+     headers: token
+      ? { Authorization: `Bearer ${token}` } // ✔ ONLY auth header
+      : undefined,
+    body: formData,
   });
 if (res.status === 403) {
     // backend says NOT_AUTHORIZED
