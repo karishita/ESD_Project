@@ -92,7 +92,7 @@ useEffect(() => {
   // };
 
   const validatePhone = (v: string) => {
-    // allow empty OR 10 digits (adjust to your format)
+    // allow empty OR 10 digits
     return v === "" || /^\d{10}$/.test(v);
   };
 
@@ -103,7 +103,7 @@ useEffect(() => {
     if (!fullName.trim()) e.fullName = "Full name is required.";
    // if (!email.trim()) e.email = "Email is required.";
     //else if (!validateEmail(email.trim())) e.email = "Enter a valid email.";
-    if (!validatePhone(phone.trim())) e.phone = "Phone must be 10 digits or left empty.";
+    if (!validatePhone(phone.trim())) e.phone = "Phone must be 10 digits";
 
     if (!selectedPhoto) e.photo = "Please upload a photo.";
     if (!departmentId) e.departmentId = "Select a department.";
@@ -124,7 +124,7 @@ useEffect(() => {
       return;
     }
 
-    // prepare payload (photo filename for now)
+    // prepare payload (photo filename )
     const payload = {
       fullName: fullName.trim(),
      // email: email.trim(),
@@ -172,7 +172,20 @@ useEffect(() => {
 
   // ---------- helper: prepare options ----------
   const deptOptions = departments.map((d) => ({ id: d.id, name: d.name }));
-  const courseOptions = courses.map((c) => ({ id: c.id, name: c.courseName }));
+  //const courseOptions = courses.map((c) => ({ id: c.id, name: c.courseName }));
+
+  const courseOptions = courses.map((c) => {
+  const slotText = c.timeSlots
+    .map((t) => `${t.dayOfWeek} ${t.startTime}–${t.endTime}`)
+    .join(", ");
+  
+  return {
+    id: c.id,
+    name: `${c.courseName} — ${slotText}`
+  };
+});
+
+
 
   return (
     <div className="card" role="region" aria-label="Faculty registration form">
