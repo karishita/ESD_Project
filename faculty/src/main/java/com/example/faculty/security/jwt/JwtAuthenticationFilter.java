@@ -40,7 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-                // We don't have roles yet → empty list
+                // No roles yet → empty list
                 UserDetails userDetails =
                         new User(email, "", Collections.emptyList());
 

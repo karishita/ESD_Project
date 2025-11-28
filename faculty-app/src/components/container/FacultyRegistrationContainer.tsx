@@ -45,7 +45,7 @@ useEffect(() => {
   // --- validation errors (field-level) ---
   const [errors, setErrors] = useState<{
     fullName?: string;
-    email?: string;
+    //email?: string;
     phone?: string;
     photo?: string;
     departmentId?: string;
@@ -96,7 +96,7 @@ useEffect(() => {
     return v === "" || /^\d{10}$/.test(v);
   };
 
-  // validate single field (used on blur or submit)
+  // validate single field (used on submit)
   const validateAll = () => {
     const e: typeof errors = {};
 

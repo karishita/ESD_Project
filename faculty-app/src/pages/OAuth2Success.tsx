@@ -11,7 +11,7 @@ export default function OAuth2Success() {
     const token = params.get("token");
 
     if (token) {
-      // store token (localStorage for simplicity). For production prefer HttpOnly cookie.
+      // store token (localStorage)
       localStorage.setItem("accessToken", token);
       // navigate to registration page (remove token from URL)
       navigate("/registration", { replace: true });
